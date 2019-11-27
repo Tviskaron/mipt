@@ -5,6 +5,17 @@ import numpy as np
 import gym
 
 
+class KoState:
+    def __init__(self, state):
+        self.state = state
+
+    def __eq__(self, other):
+        return self.state == other.state
+
+    def __hash__(self):
+        return self.state.__hash__()
+
+
 class GoEnv(gym.Env):
     def render(self, mode='ansi'):
         sys.stdout.write(self.board.__repr__().decode().replace("O", "W").replace("X", "B") + '\n')
@@ -12,8 +23,8 @@ class GoEnv(gym.Env):
     def step(self, action):
 
         if not self.done:
-            if action not in self.get_possible_actions():
-                raise KeyError("Wrong action")
+            # if action not in self.get_possible_actions():
+            #     raise KeyError("Wrong action")
             self.board = self.board.play(action, self.current_player)
 
         self.current_player = 1 if self.current_player == 2 else 2
@@ -22,14 +33,17 @@ class GoEnv(gym.Env):
             self.done = True
         if not self.done:
             self.opponent_pass = action == -1
-
+        self.game_states.add(KoState(state=self.board))
         return self.get_state(), self.get_reward() if self.done else 0, self.done, None
 
     def reset(self):
+        self.game_states = set()
         self.current_player = 1
         self.board = pachi_py.CreateBoard(self.size)
         self.opponent_pass = False
         self.done = False
+        self.game_states = set()
+        self.game_states.add(KoState(state=self.board))
         return self.get_state()
 
     def __init__(self, size=5):
@@ -38,9 +52,21 @@ class GoEnv(gym.Env):
         self.current_player = None
         self.board = None
         self.opponent_pass = None
+        self.game_states = None
 
     def get_possible_actions(self):
-        return self.board.get_legal_coords(color=self.current_player, filter_suicides=True)
+        legal_moves = self.board.get_legal_coords(color=self.current_player, filter_suicides=True)
+        result = set()
+        result.add(-1)
+        for move in legal_moves:
+            if move == -1:
+                continue
+
+            new_board = self.board.clone()
+            new_board = new_board.play(move, self.current_player)
+            if KoState(new_board) not in self.game_states:
+                result.add(move)
+        return list(result)
 
     def get_state(self):
         black = tuple(map(tuple, self.board.black_stones.tolist()))
