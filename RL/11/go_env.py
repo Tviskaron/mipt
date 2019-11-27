@@ -23,8 +23,8 @@ class GoEnv(gym.Env):
     def step(self, action):
 
         if not self.done:
-            # if action not in self.get_possible_actions():
-            #     raise KeyError("Wrong action")
+            if action not in self.get_possible_actions():
+                raise KeyError("Wrong action")
             self.board = self.board.play(action, self.current_player)
 
         self.current_player = 1 if self.current_player == 2 else 2
