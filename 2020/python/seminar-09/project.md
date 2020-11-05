@@ -34,7 +34,7 @@ Github Hello World: [hello-world](https://guides.github.com/activities/hello-wor
 
 ---
 
-Статический сайт на фласке, пример шаблонов: [basic-flask-app](https://github.com/macloo/basic-flask-app])
+Статический сайт на фласке, пример шаблонов: [basic-flask-app](https://github.com/macloo/basic-flask-app)
 
 Работа с формами и неплохой туториал: [https://github.com/macloo/flask-forms](https://github.com/macloo/flask-forms)
 
