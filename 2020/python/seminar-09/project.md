@@ -28,7 +28,7 @@
 
 Github Hello World: [hello-world](https://guides.github.com/activities/hello-world/)
 
-Вариант на русском: [git+github](http://cs.mipt.ru/python/lessons/lab4)
+Вариант на русском: [git+github](http://cs.mipt.ru/python/lessons/lab4.html)
 
 Документация git: [https://git-scm.com/docs/gittutorial](https://git-scm.com/docs/gittutorial)
 
